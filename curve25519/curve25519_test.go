@@ -98,6 +98,24 @@ func TestHighBitIgnored(t *testing.T) {
 	}
 }
 
+func TestNoClamping(t *testing.T) {
+	var s, u [32]byte
+	rand.Read(s[:])
+	rand.Read(u[:])
+
+	var hi0, hi1 [32]byte
+
+	u[31] &= 0x7f
+	ScalarMultNoClamping(&hi0, &s, &u)
+
+	u[31] |= 0x80
+	ScalarMultNoClamping(&hi1, &s, &u)
+
+	if !bytes.Equal(hi0[:], hi1[:]) {
+		t.Errorf("high bit of group point should not affect result")
+	}
+}
+
 var benchmarkSink byte
 
 func BenchmarkX25519Basepoint(b *testing.B) {
