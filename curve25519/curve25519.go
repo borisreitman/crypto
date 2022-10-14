@@ -74,6 +74,7 @@ func ScalarMult(dst, scalar, point *[32]byte) {
 
 func ScalarMultNoClamping(dst, scalar, point *[32]byte) {
 	var e [32]byte
+	copy(e[:], scalar[:])
 
 	var x1, x2, z2, x3, z3, tmp0, tmp1 field.Element
 	x1.SetBytes(point[:])
